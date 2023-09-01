@@ -1,0 +1,17 @@
+﻿.container {
+    justify-content: space-between;
+    padding: 50px;
+    max-width: 800px;
+    gap: 20px
+}
+
+.input {
+    flex-grow: 1;
+}
+
+@media (max-width: 768px) {
+    .input {
+        width: 100%;
+        order: -1;
+    }
+}

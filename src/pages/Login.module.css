@@ -1,0 +1,18 @@
+﻿.container {
+    padding-left: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.container > :global.MuiAlert-root {
+    margin: 10px auto 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 50px 10%;
+        justify-content: start;
+    }
+}
