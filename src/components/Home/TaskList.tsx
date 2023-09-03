@@ -1,12 +1,18 @@
 ﻿import { useRef, useState } from "react";
-import { Box, Button, ListItem, ListItemText, Modal, Typography } from "@mui/material";
+import { Box, Button, ListItem, ListItemText, Typography } from "@mui/material";
 import { TaskListProps } from "../../types/TaskList.ts";
 
 import styles from './TaskList.module.css';
+import ConfirmationModal from "../Shared/ConfirmationModal.tsx";
 
 const TaskList = ({ tasks, onEditTask, onDeleteTask }: TaskListProps) => {
     const [open, setOpen] = useState(false);
     const taskIdRef = useRef<number>();
+
+    const onDelete = () => {
+        onDeleteTask(taskIdRef.current);
+        setOpen(false);
+    };
 
     return (
         <Box className={styles.listContent}>
@@ -20,26 +26,11 @@ const TaskList = ({ tasks, onEditTask, onDeleteTask }: TaskListProps) => {
                     <Button variant="outlined" color="info" onClick={() => onEditTask(task)}>Edit</Button>
                     <Button variant="contained" color="error" onClick={() => {
                         setOpen(true);
-                        taskIdRef.current = task.id
+                        taskIdRef.current = task.id;
                     }}>Delete</Button>
                 </ListItem>
             ))}
-            <Modal
-                open={open}
-                onClose={() => setOpen(false)}
-            >
-                <Box className={styles.modal}>
-                    <Typography fontSize={24} textAlign="center" marginBottom={3}>Are you sure to delete the task?</Typography>
-                    <Box className={styles.actions}>
-                        <Button variant="contained" color="inherit" onClick={() => setOpen(false)}>Cancel</Button>
-                        <Button variant="contained" color="error" onClick={() => {
-                            onDeleteTask(taskIdRef.current as number);
-                            setOpen(false);
-                        }}>Delete
-                        </Button>
-                    </Box>
-                </Box>
-            </Modal>
+            <ConfirmationModal open={open} onClose={() => setOpen(false)} onDelete={onDelete} />
         </Box>
     );
 };

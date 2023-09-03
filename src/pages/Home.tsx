@@ -30,10 +30,6 @@ const Home = () => {
         setEditModel(null);
     };
 
-    const clearCards = () => {
-        setTasks([]);
-    };
-
     const handleInputChange = (e: { target: { value: string; }; }) => {
         const { value } = e.target;
         setFilteredTasks(value === '' ? null : tasks.filter((task => task.title.includes(value) || task.date.includes(value))));
@@ -49,8 +45,9 @@ const Home = () => {
         setEditModel(null);
     };
 
-    const onDeleteTask = (id: number) => {
-        setTasks(prevState => prevState.filter(task => task.id !== id));
+    const onDeleteTask = (id?: number) => {
+        if (!tasks.length) return;
+        setTasks(id ? tasks.filter(task => task.id !== id) : []);
     };
 
     return (
@@ -63,7 +60,7 @@ const Home = () => {
                     <TaskForm onSubmit={addOrUpdateTask} editModel={editModel} />
                 </Box>
             </Modal>
-            <TaskActions onAddTask={setOpen} onSearch={handleInputChange} onClear={clearCards} />
+            <TaskActions onAddTask={setOpen} onSearch={handleInputChange} onClear={onDeleteTask} />
             <TaskList tasks={filteredTasks || tasks} onEditTask={onEditTask} onDeleteTask={onDeleteTask} />
         </Grid>
     );
