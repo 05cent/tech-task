@@ -1,41 +1,49 @@
-﻿import { useState } from "react";
+﻿import { useRef, useState } from "react";
 import { Box, Grid, Modal } from "@mui/material";
 import { TaskActions, TaskForm, TaskList } from "../components/Home";
-import { TaskFormData } from "../types/TaskForm.ts";
+import { TaskModel } from "../types/TaskForm.ts";
 
 import styles from './Home.module.css';
 
 const Home = () => {
-    const [tasks, setTasks] = useState<TaskFormData[]>([]);
-    const [filteredTasks, setFilteredTasks] = useState<TaskFormData[] | null>(null);
-    const [open, setOpen] = useState(false);
-    const [editModel, setEditModel] = useState<TaskFormData | null>(null);
+    const tasks = useRef<TaskModel[]>([]);
+    const searchValueRef = useRef('');
 
-    const addOrUpdateTask = (formData: TaskFormData) => {
+    const [filteredTasks, setFilteredTasks] = useState<TaskModel[]>([]);
+    const [open, setOpen] = useState(false);
+    const [editModel, setEditModel] = useState<TaskModel | null>(null);
+
+    const addOrUpdateTask = (formData: TaskModel) => {
         const id = formData.id;
         id ? updateTask(formData) : addTask(formData);
         setOpen(false);
     };
 
-    const addTask = (formData: TaskFormData) => {
-        const newTask: TaskFormData = { ...formData, id: (tasks.length && Math.max(...tasks.map(i => i.id)) + 1) || 1 };
-        setTasks([...tasks, newTask]);
+    const searchIfNeed = () => {
+        setFilteredTasks(tasks.current.filter(t => searchValueRef.current.trim() === ''
+            || t.title.includes(searchValueRef.current)
+            || t.date.includes(searchValueRef.current)));
     };
 
-    const updateTask = (formData: TaskFormData) => {
-        const indexToEdit = tasks.findIndex(item => item.id === formData.id);
-        const updatedTasks = [...tasks];
-        updatedTasks[indexToEdit] = { ...formData };
-        setTasks(updatedTasks);
+    const addTask = (formData: TaskModel) => {
+        const newTask: TaskModel = { ...formData, id: (tasks.current.length && Math.max(...tasks.current.map(i => i.id))) + 1 };
+        tasks.current.push(newTask);
+        searchIfNeed();
+    };
+
+    const updateTask = (formData: TaskModel) => {
+        tasks.current = tasks.current.map(t => t.id === formData.id ? { ...formData } : t);
+        searchIfNeed();
         setEditModel(null);
     };
 
     const handleInputChange = (e: { target: { value: string; }; }) => {
         const { value } = e.target;
-        setFilteredTasks(value === '' ? null : tasks.filter((task => task.title.includes(value) || task.date.includes(value))));
+        searchValueRef.current = value;
+        searchIfNeed();
     };
 
-    const onEditTask = (task: TaskFormData) => {
+    const onEditTask = (task: TaskModel) => {
         setOpen(true);
         setEditModel(task);
     };
@@ -45,9 +53,15 @@ const Home = () => {
         setEditModel(null);
     };
 
+    const clearTasks = () => {
+        if (!tasks.current.length) return;
+        tasks.current = [];
+        setFilteredTasks([]);
+    };
+
     const onDeleteTask = (id?: number) => {
-        if (!tasks.length) return;
-        setTasks(id ? tasks.filter(task => task.id !== id) : []);
+        tasks.current = tasks.current.filter(t => t.id !== id);
+        searchIfNeed();
     };
 
     return (
@@ -60,8 +74,8 @@ const Home = () => {
                     <TaskForm onSubmit={addOrUpdateTask} editModel={editModel} />
                 </Box>
             </Modal>
-            <TaskActions onAddTask={setOpen} onSearch={handleInputChange} onClear={onDeleteTask} />
-            <TaskList tasks={filteredTasks || tasks} onEditTask={onEditTask} onDeleteTask={onDeleteTask} />
+            <TaskActions onAddTask={setOpen} onSearch={handleInputChange} onClear={clearTasks} />
+            <TaskList tasks={filteredTasks} onEditTask={onEditTask} onDeleteTask={onDeleteTask} />
         </Grid>
     );
 };

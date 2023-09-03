@@ -1,11 +1,11 @@
 ﻿import { useState } from "react";
 import { TextField, Button, Container, Typography, MenuItem } from '@mui/material';
-import { TaskFormData, TaskFormProps } from "../../types/TaskForm.ts";
+import { TaskModel, TaskFormProps } from "../../types/TaskForm.ts";
 
 import styles from "./TaskForm.module.css";
 
 const TaskForm = ({ onSubmit, editModel }: TaskFormProps) => {
-    const [formData, setFormData] = useState<TaskFormData>(editModel || {
+    const [formData, setFormData] = useState<TaskModel>(editModel || {
         id: 0,
         title: '',
         desc: '',
@@ -66,7 +66,7 @@ const TaskForm = ({ onSubmit, editModel }: TaskFormProps) => {
                     value={formData.status}
                     onChange={handleChange}
                     fullWidth
-                    className={styles.select}
+                    className={styles.statusSelect}
                 >
                     <MenuItem value="To Do">To Do</MenuItem>
                     <MenuItem value="In progress">In progress</MenuItem>

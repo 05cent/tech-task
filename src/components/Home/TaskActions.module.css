@@ -5,12 +5,12 @@
     gap: 20px
 }
 
-.input {
+.searchInput {
     flex-grow: 1;
 }
 
 @media (max-width: 768px) {
-    .input {
+    .searchInput {
         width: 100%;
         order: -1;
     }

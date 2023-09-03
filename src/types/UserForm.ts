@@ -8,6 +8,6 @@ export type FormData = {
 export interface UserFormProps {
     formData: FormData;
     setFormData: React.Dispatch<React.SetStateAction<FormData>>;
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    onSubmit: () => void;
     title: string;
 }

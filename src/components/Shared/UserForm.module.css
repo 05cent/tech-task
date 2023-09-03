@@ -11,7 +11,7 @@
     padding-bottom: 5px;
 }
 
-.link {
+.signUp > a {
     border: 1px solid #1976d2;
     text-decoration: none;
     color: #1976d2;
@@ -20,7 +20,7 @@
     font-weight: 600;
 }
 
-.link:hover {
+.signUp > a:hover {
     background: #e6e6f5;
 }
 

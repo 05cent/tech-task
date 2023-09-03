@@ -1,7 +1,7 @@
-﻿import { TaskFormData } from "./TaskForm.ts";
+﻿import { TaskModel } from "./TaskForm.ts";
 
 export interface TaskListProps {
-    tasks: TaskFormData[];
-    onEditTask: (task: TaskFormData) => void;
+    tasks: TaskModel[];
+    onEditTask: (task: TaskModel) => void;
     onDeleteTask: (id?: number) => void;
 }

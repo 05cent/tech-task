@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import { useState } from 'react';
 import UserForm from "../components/Shared/UserForm.tsx";
 import { Alert, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -19,8 +19,7 @@ const Register = () => {
     });
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         if (formData.password.length < 8) {
             setRegisterAlert({ isAlert: true, severity: 'warning', message: 'Password should be at least 8 characters long.' });
             return;

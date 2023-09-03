@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+﻿import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Alert, Box } from "@mui/material";
@@ -22,8 +22,7 @@ const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         const userData = JSON.parse(localStorage.getItem(formData.email) as string);
         if (!userData || userData.email !== formData.email || userData.password !== formData.password) {
             setLoginAlert({ isAlert: true, severity: 'error', message: 'Wrong email or password.' });

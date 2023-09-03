@@ -1,12 +1,12 @@
-﻿export type TaskFormData = {
+﻿export type TaskModel = {
     id: number;
     title: string;
     desc: string;
     date: string;
-    status: string
-}
+    status: string;
+};
 
 export interface TaskFormProps {
-    onSubmit: (formData: TaskFormData) => void;
-    editModel: TaskFormData | null
+    onSubmit: (formData: TaskModel) => void;
+    editModel: TaskModel | null;
 }

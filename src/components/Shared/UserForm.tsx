@@ -21,7 +21,10 @@ const UserForm = ({ formData, setFormData, onSubmit, title }: UserFormProps) => 
     return (
         <Container maxWidth="sm">
             <Typography variant="h3" color="Highlight" fontFamily="monospace">{title}</Typography>
-            <form onSubmit={(e) => onSubmit(e)}>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                onSubmit();
+            }}>
                 <TextField
                     label="Email"
                     name="email"
@@ -45,7 +48,7 @@ const UserForm = ({ formData, setFormData, onSubmit, title }: UserFormProps) => 
                 {title === 'Login' &&
                     <Box className={styles.signUp}>
                         <Typography fontSize={22} fontWeight={700}>Don't have an account?</Typography>
-                        <Link to="/register" className={styles.link}>Sign Up</Link>
+                        <Link to="/register">Sign Up</Link>
                     </Box>
                 }
                 <Button type="submit" variant="contained" color="primary" fullWidth>

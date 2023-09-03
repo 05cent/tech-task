@@ -1,7 +1,7 @@
 ﻿import { useState } from "react";
 import { Button, Grid, TextField } from "@mui/material";
 import { TaskActionsProps } from "../../types/TaskActions.ts";
-import ConfirmationModal from "../Shared/ConfirmationModal.tsx";
+import { DeleteConfirmationModal } from "../Shared";
 
 import styles from './TaskActions.module.css';
 
@@ -19,11 +19,11 @@ const TaskActions = ({ onSearch, onClear, onAddTask }: TaskActionsProps) => {
             label="Search"
             type="search"
             onChange={onSearch}
-            className={styles.input}
+            className={styles.searchInput}
             size="small"
         />
         <Button className={styles.button} onClick={() => setOpen(true)} variant="contained" color="error">clear tasks</Button>
-        <ConfirmationModal open={open} onClose={() => setOpen(false)} onDelete={onDelete} />
+        <DeleteConfirmationModal open={open} onClose={() => setOpen(false)} onDelete={onDelete} />
     </Grid>;
 };
 
