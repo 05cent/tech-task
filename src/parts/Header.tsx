@@ -1,9 +1,9 @@
-﻿import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { Button} from "@mui/material";
-import { onLogout } from "../store/slices/userAuth.ts";
+﻿import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Button } from '@mui/material';
+import { onLogout } from '../store/slices/userAuthStore.ts';
 
-import styles from "./Header.module.css";
+import styles from './Header.module.css';
 
 export const Header = () => {
     const navigate = useNavigate();

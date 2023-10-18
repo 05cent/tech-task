@@ -1,10 +1,10 @@
-import { useEffect } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { onLoginSuccess } from "./store/slices/userAuth.ts";
-import { Home, Login, Register } from "./pages";
-import { RootState } from "./types/UserAuthSlice.ts";
-import { Header } from "./parts";
+import { useEffect } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { onLoginSuccess } from './store/slices/userAuthStore.ts';
+import { RootState } from './types/Store.ts';
+import { Home, Login, Register, Task } from './pages';
+import { Header } from './parts';
 
 import './app.css';
 
@@ -22,6 +22,7 @@ function App() {
             <Header />
             <Routes>
                 <Route path="/home" element={<Home />} />
+                <Route path="/tasks/:id" element={<Task />} />
                 <Route path="/*" element={<Navigate to="/home" replace />} />
             </Routes>
         </> : <Routes>

@@ -6,7 +6,3 @@
 export type UserAuth = {
     userData: null | UserData
 }
-
-export type RootState = {
-    userAuth: UserAuth
-}

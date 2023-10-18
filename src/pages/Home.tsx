@@ -1,81 +1,74 @@
-﻿import { useRef, useState } from "react";
-import { Box, Grid, Modal } from "@mui/material";
-import { TaskActions, TaskForm, TaskList } from "../components/Home";
-import { TaskModel } from "../types/TaskForm.ts";
-
-import styles from './Home.module.css';
+﻿import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Grid } from '@mui/material';
+import { TaskActions, TaskForm, TaskList } from '../components/Home';
+import { TaskModel } from '../types/Task.ts';
+import { RootState } from '../types/Store.ts';
+import {
+    changeTask,
+    createTask,
+    removeTask,
+    resetTasks,
+    setEditModel,
+    setSearchValue
+} from '../store/slices/tasksStore.ts';
+import { ModalDialog } from '../components/Shared/';
 
 const Home = () => {
-    const tasks = useRef<TaskModel[]>([]);
-    const searchValueRef = useRef('');
-
-    const [filteredTasks, setFilteredTasks] = useState<TaskModel[]>([]);
     const [open, setOpen] = useState(false);
-    const [editModel, setEditModel] = useState<TaskModel | null>(null);
+
+    const { tasks } = useSelector((state: RootState) => state.tasks);
+    const dispatch = useDispatch();
 
     const addOrUpdateTask = (formData: TaskModel) => {
-        const id = formData.id;
-        id ? updateTask(formData) : addTask(formData);
+        const { id } = formData;
+        dispatch((id ? changeTask : createTask)(formData));
         setOpen(false);
     };
 
-    const searchIfNeed = () => {
-        setFilteredTasks(tasks.current.filter(t => searchValueRef.current.trim() === ''
-            || t.title.includes(searchValueRef.current)
-            || t.date.includes(searchValueRef.current)));
-    };
-
-    const addTask = (formData: TaskModel) => {
-        const newTask: TaskModel = { ...formData, id: (tasks.current.length && Math.max(...tasks.current.map(i => i.id))) + 1 };
-        tasks.current.push(newTask);
-        searchIfNeed();
-    };
-
-    const updateTask = (formData: TaskModel) => {
-        tasks.current = tasks.current.map(t => t.id === formData.id ? { ...formData } : t);
-        searchIfNeed();
-        setEditModel(null);
-    };
-
-    const handleInputChange = (e: { target: { value: string; }; }) => {
+    const handleInputChange = (e: {
+        target: {
+            value: string;
+        };
+    }) => {
         const { value } = e.target;
-        searchValueRef.current = value;
-        searchIfNeed();
+        dispatch(setSearchValue(value));
     };
 
     const onEditTask = (task: TaskModel) => {
         setOpen(true);
-        setEditModel(task);
+        dispatch(setEditModel(task));
     };
 
     const onModalClose = () => {
         setOpen(false);
-        setEditModel(null);
     };
 
     const clearTasks = () => {
-        if (!tasks.current.length) return;
-        tasks.current = [];
-        setFilteredTasks([]);
+        if (!tasks.length) return;
+        dispatch(resetTasks());
     };
 
-    const onDeleteTask = (id?: number) => {
-        tasks.current = tasks.current.filter(t => t.id !== id);
-        searchIfNeed();
+    const onDeleteTask = (id: number) => {
+        dispatch(removeTask(id));
     };
+
+    useEffect(() => {
+        return () => {
+            dispatch(setSearchValue(''));
+        };
+    }, []);
 
     return (
         <Grid container justifyContent="center" flexDirection="column" alignItems="center">
-            <Modal
+            <ModalDialog
                 open={open}
                 onClose={onModalClose}
             >
-                <Box className={styles.modal}>
-                    <TaskForm onSubmit={addOrUpdateTask} editModel={editModel} />
-                </Box>
-            </Modal>
+                <TaskForm onSubmit={addOrUpdateTask} />
+            </ModalDialog>
             <TaskActions onAddTask={setOpen} onSearch={handleInputChange} onClear={clearTasks} />
-            <TaskList tasks={filteredTasks} onEditTask={onEditTask} onDeleteTask={onDeleteTask} />
+            <TaskList tasks={tasks} onEditTask={onEditTask} onDeleteTask={onDeleteTask} />
         </Grid>
     );
 };

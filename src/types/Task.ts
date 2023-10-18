@@ -8,5 +8,4 @@
 
 export interface TaskFormProps {
     onSubmit: (formData: TaskModel) => void;
-    editModel: TaskModel | null;
 }

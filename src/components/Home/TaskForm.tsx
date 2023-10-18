@@ -1,10 +1,13 @@
-﻿import { useState } from "react";
-import { TextField, Button, Container, Typography, MenuItem } from '@mui/material';
-import { TaskModel, TaskFormProps } from "../../types/TaskForm.ts";
+﻿import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Button, Container, MenuItem, TextField, Typography } from '@mui/material';
+import { TaskFormProps, TaskModel } from '../../types/Task.ts';
+import { RootState } from '../../types/Store.ts';
 
-import styles from "./TaskForm.module.css";
+import styles from './TaskForm.module.css';
 
-const TaskForm = ({ onSubmit, editModel }: TaskFormProps) => {
+const TaskForm = ({ onSubmit }: TaskFormProps) => {
+    const { editModel } = useSelector((state: RootState) => state.tasks);
     const [formData, setFormData] = useState<TaskModel>(editModel || {
         id: 0,
         title: '',
@@ -22,13 +25,16 @@ const TaskForm = ({ onSubmit, editModel }: TaskFormProps) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
             ...prevData,
-            [name]: value,
+            [name]: value
         }));
     };
 
     return (
         <Container maxWidth="sm">
-            <Typography variant="h3" color="Highlight" fontFamily="monospace">{formData?.id ? 'Edit Task' : 'Add Task'}</Typography>
+            <Typography variant="h3"
+                        color="Highlight"
+                        fontFamily="monospace">{formData?.id ? 'Edit Task' : 'Add Task'}
+            </Typography>
             <form onSubmit={(e) => {
                 e.preventDefault();
                 onSubmit(formData);

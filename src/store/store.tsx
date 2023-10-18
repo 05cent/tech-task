@@ -1,9 +1,10 @@
-﻿import { configureStore } from "@reduxjs/toolkit";
-import userAuth from "./slices/userAuth.ts";
+﻿import { configureStore } from '@reduxjs/toolkit';
+import { tasks, userAuth } from './slices';
 
 const userAuthStore = configureStore({
     reducer: {
-        userAuth
+        userAuth,
+        tasks
     }
 });
 

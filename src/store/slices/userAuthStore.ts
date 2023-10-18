@@ -1,11 +1,11 @@
 ﻿import { createSlice } from '@reduxjs/toolkit';
-import { UserAuth } from "../../types/UserAuthSlice.ts";
+import { UserAuth } from '../../types/UserAuthStore.ts';
 
 const initialState: UserAuth = {
     userData: null
 };
 
-const userAuth = createSlice({
+const userAuthStore = createSlice({
     name: 'userAuth',
     initialState,
     reducers: {
@@ -19,6 +19,6 @@ const userAuth = createSlice({
     }
 });
 
-export const { onLoginSuccess, onLogout } = userAuth.actions;
+export const { onLoginSuccess, onLogout } = userAuthStore.actions;
 
-export default userAuth.reducer;
+export default userAuthStore.reducer;
